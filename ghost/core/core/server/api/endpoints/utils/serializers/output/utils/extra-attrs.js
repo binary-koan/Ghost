@@ -62,6 +62,10 @@ module.exports.forPost = (frame, model, attrs) => {
                 additionalImages += 1;
             }
             attrs.reading_time = readingMinutes(attrs.html, additionalImages);
+
+            if (frame.options.columns && !_.includes(frame.options.columns, 'html')) {
+                delete attrs.html;
+            }
         }
     }
 };

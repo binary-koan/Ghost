@@ -3840,6 +3840,68 @@ Header Level 3
 }
 `;
 
+exports[`Posts Content API Can use post reading_time as field 1: [body] 1`] = `
+Object {
+  "meta": Object {
+    "pagination": Object {
+      "limit": 15,
+      "next": null,
+      "page": 1,
+      "pages": 1,
+      "prev": null,
+      "total": 15,
+    },
+  },
+  "posts": Array [
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+    Object {
+      "reading_time": Any<Number>,
+    },
+  ],
+}
+`;
+
 exports[`Posts Content API Cannot request mobiledoc or lexical formats 1: [body] 1`] = `
 Object {
   "meta": Object {
