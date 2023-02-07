@@ -5,7 +5,7 @@ const testUtils = require('../../utils');
 const models = require('../../../core/server/models');
 
 const {agentProvider, fixtureManager, matchers} = require('../../utils/e2e-framework');
-const {anyArray, anyContentVersion, anyEtag, anyUuid, anyISODateTimeWithTZ} = matchers;
+const {anyArray, anyContentVersion, anyEtag, anyUuid, anyISODateTimeWithTZ, anyNumber} = matchers;
 
 const postMatcher = {
     published_at: anyISODateTimeWithTZ,
@@ -341,5 +341,16 @@ describe('Posts Content API', function () {
             .get(`posts/?fields=plaintext`)
             .expectStatus(200)
             .matchBodySnapshot();
+    });
+
+    it('Can use post reading_time as field', async function () {
+        await agent
+            .get(`posts/?fields=reading_time`)
+            .expectStatus(200)
+            .matchBodySnapshot({
+                posts: new Array(15).fill({
+                    reading_time: anyNumber
+                })
+            });
     });
 });
