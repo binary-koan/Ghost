@@ -57,6 +57,9 @@ const handleMatch = (data, operator, value) => {
     case '<=':
         result = data <= value;
         break;
+    case 'includes':
+        result = (typeof data === 'string') ? data.includes(value) : data === value;
+        break;
     default:
         result = data === value;
     }

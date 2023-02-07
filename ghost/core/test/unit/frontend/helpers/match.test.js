@@ -246,6 +246,15 @@ describe('Match helper', function () {
             }, hash);
         });
 
+        describe('Explicit Includes', function () {
+            runTests({
+                // String to String comparisons
+                '{{match "test" "includes" "es"}}': 'true',
+                '{{match "test" "includes" "1234"}}': 'false',
+                '{{match "test" "includes" "test"}}': 'true'
+            }, hash);
+        });
+
         // SafeStrings represent the original value as an object for example:
         // SafeString { string: true } vs SafeString { string: 'true' }
         // allows us to know if the original value was a boolean or a string
