@@ -7,6 +7,10 @@ const logging = require('@tryghost/logging');
 const notify = require('./notify');
 const moment = require('moment');
 const stoppable = require('stoppable');
+const {Server} = require('socket.io');
+const {MemberCommentEvent} = require('@tryghost/member-events');
+const DomainEvents = require('@tryghost/domain-events');
+const commentsService = require('./services/comments');
 
 const messages = {
     cantTouchThis: 'Can\'t touch this',
@@ -81,6 +85,20 @@ class GhostServer {
                 port,
                 host
             );
+
+            const io = new Server(self.httpServer);
+
+            io.on('connection', (socket) => {
+                socket.on('listen:members/comments/counts', (data) => {
+                    data.ids.forEach(id => socket.join(`members/comments/counts/${id}`));
+                });
+            });
+
+            DomainEvents.subscribe(MemberCommentEvent, async (event) => {
+                io.to(`members/comments/counts/${event.data.postId}`).emit('members/comments/counts/update', {
+                    counts: await commentsService.controller.stats.getCountsByPost([event.data.postId])
+                });
+            });
 
             self.httpServer.on('error', function (error) {
                 let ghostError;
