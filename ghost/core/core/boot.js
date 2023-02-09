@@ -239,8 +239,9 @@ async function initExpressApps({frontend, backend, config}) {
  * Mounts a Socket.IO server. Only works if
  * @param {object} options
  * @param {object} options.ghostServer
+ * @param {object} options.config
  */
-function initSocketIO({ghostServer}) {
+function initSocketIO({ghostServer, config}) {
     debug('Begin: initSocketIO');
 
     if (!ghostServer || !ghostServer.httpServer) {
@@ -251,7 +252,7 @@ function initSocketIO({ghostServer}) {
         });
     }
 
-    const realtimeServer = require('./server/web/realtime')(ghostServer.httpServer);
+    const realtimeServer = require('./server/web/realtime')(ghostServer.httpServer, config.getSubdir());
 
     debug('End: initSocketIO');
     return realtimeServer;
@@ -487,7 +488,7 @@ async function bootGhost({backend = true, frontend = true, realtime = true, serv
         }
 
         if (realtime) {
-            initSocketIO({ghostServer});
+            initSocketIO({ghostServer, config});
         }
 
         await initServices({config});
