@@ -178,6 +178,7 @@ const freshModeGhostStart = async (options) => {
     ghostServer = await boot({
         backend: options.backend,
         frontend: options.frontend,
+        realtime: options.realtime,
         server: options.server
     });
 

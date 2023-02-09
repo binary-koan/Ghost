@@ -3,7 +3,6 @@ const {agentProvider, mockManager, fixtureManager, configUtils} = require('../..
 const settingsCache = require('../../../core/shared/settings-cache');
 const sinon = require('sinon');
 const models = require('../../../core/server/models');
-const {io: ioClient} = require('socket.io-client');
 
 let membersAgent, membersAgent2, ghostServer, postId, socketClient;
 
@@ -30,16 +29,15 @@ async function replyToComment() {
 
 describe('Comments real-time API', function () {
     before(async function () {
-        const agents = await agentProvider.getAgentsWithFrontend();
+        const agents = await agentProvider.getAgentsForRealtime();
         membersAgent = agents.membersAgent;
         membersAgent2 = membersAgent.duplicate();
+        socketClient = agents.socketClient;
         ghostServer = agents.ghostServer;
 
         await fixtureManager.init('posts', 'members', 'comments');
 
         postId = fixtureManager.get('posts', 0).id;
-
-        socketClient = ioClient(`http://localhost:${agents.ghostServer.httpServer.address().port}`);
     });
 
     after(async function () {

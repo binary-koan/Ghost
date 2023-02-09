@@ -47,7 +47,8 @@ module.exports = {
     initGhost: async (options = {}) => {
         const app = await boot(Object.assign({
             server: false,
-            backend: false
+            backend: false,
+            realtime: false
         }, options));
 
         await urlServiceUtils.isFinished();

@@ -20,6 +20,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 const uuid = require('uuid');
+const {io: ioClient} = require('socket.io-client');
 
 const fixtureUtils = require('./fixture-utils');
 const redirectsUtils = require('./redirects');
@@ -61,6 +62,7 @@ const startGhost = async (options = {}) => {
     const defaults = {
         backend: true,
         frontend: false,
+        realtime: false,
         server: false
     };
 
@@ -378,6 +380,51 @@ const getAgentsWithFrontend = async () => {
     };
 };
 
+/**
+ * WARNING: when using this, you should stop the returned ghostServer after the tests.
+ * @NOTE: for now method returns a supertest agent for Frontend instead of test agent with snapshot support.
+ *        frontendAgent should be returning an instance of TestAgent (related: https://github.com/TryGhost/Toolbox/issues/471)
+ *  @returns {Promise<{membersAgent: InstanceType<MembersAPITestAgent>, ghostServer: Express.Application, socketClient: object}>} agents
+ */
+const getAgentsForRealtime = async () => {
+    let ghostServer;
+    let membersAgent;
+    let socketClient;
+
+    const bootOptions = {
+        frontend: true,
+        realtime: true,
+        server: true
+    };
+    try {
+        // Possible that we still have a running Ghost server from a previous old E2E test
+        // Those tests never stopped the server in the tests manually
+        await stopGhost();
+
+        // Start a new Ghost server with real HTTP listener
+        ghostServer = await startGhost(bootOptions);
+        const app = ghostServer.rootApp;
+
+        const originURL = configUtils.config.get('url');
+
+        membersAgent = new MembersAPITestAgent(app, {
+            apiURL: '/members/',
+            originURL
+        });
+
+        socketClient = ioClient(`http://localhost:${ghostServer.httpServer.address().port}`);
+    } catch (error) {
+        error.message = `Unable to create test agent. ${error.message}`;
+        throw error;
+    }
+
+    return {
+        membersAgent,
+        ghostServer,
+        socketClient
+    };
+};
+
 const insertWebhook = ({event, url}) => {
     return fixtureUtils.fixtures.insertWebhook({
         event: event,
@@ -420,7 +467,8 @@ module.exports = {
         getContentAPIAgent,
         getAgentsForMembers,
         getGhostAPIAgent,
-        getAgentsWithFrontend
+        getAgentsWithFrontend,
+        getAgentsForRealtime
     },
     // @NOTE: startGhost only exposed for playwright tests
     startGhost,
