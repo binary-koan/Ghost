@@ -236,6 +236,28 @@ async function initExpressApps({frontend, backend, config}) {
 }
 
 /**
+ * Mounts a Socket.IO server. Only works if
+ * @param {object} options
+ * @param {object} options.ghostServer
+ */
+function initSocketIO({ghostServer}) {
+    debug('Begin: initSocketIO');
+
+    if (!ghostServer || !ghostServer.httpServer) {
+        const errors = require('@tryghost/errors');
+
+        throw new errors.IncorrectUsageError({
+            message: 'Socket.IO cannot be started without an HTTP server. If using bootGhost, both realtime AND server must be true.'
+        });
+    }
+
+    const realtimeServer = require('./server/web/realtime')(ghostServer.httpServer);
+
+    debug('End: initSocketIO');
+    return realtimeServer;
+}
+
+/**
  * Dynamic routing is generated from the routes.yaml file
  * When Ghost's DB and core are loaded, we can access this file and call routing.routingManager.start
  * However this _must_ happen after the express Apps are loaded, hence why this is here and not in initFrontend
@@ -379,7 +401,7 @@ async function initBackgroundServices({config}) {
 
  * @returns {Promise<object>} ghostServer
  */
-async function bootGhost({backend = true, frontend = true, server = true} = {}) {
+async function bootGhost({backend = true, frontend = true, realtime = true, server = true} = {}) {
     // Metrics
     const startTime = Date.now();
     debug('Begin Boot');
@@ -464,6 +486,10 @@ async function bootGhost({backend = true, frontend = true, server = true} = {}) 
             await initDynamicRouting();
         }
 
+        if (realtime) {
+            initSocketIO({ghostServer});
+        }
+
         await initServices({config});
         debug('End: Load Ghost Services & Apps');
 
@@ -497,6 +523,8 @@ async function bootGhost({backend = true, frontend = true, server = true} = {}) 
         if (!errors.utils.isGhostError(serverStartError)) {
             serverStartError = new errors.InternalServerError({message: serverStartError.message, err: serverStartError});
         }
+
+        console.log('server start error', serverStartError);
 
         logging.error(serverStartError);
 

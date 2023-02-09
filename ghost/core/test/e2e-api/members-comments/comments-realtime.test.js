@@ -64,7 +64,7 @@ describe('Comments real-time API', function () {
         before(async function () {
             await membersAgent.loginAs('member@example.com');
 
-            socketClient.emit('listen:members/comments/counts', {
+            socketClient.emit('members/comments/counts:listen', {
                 ids: [postId]
             });
         });
@@ -86,7 +86,7 @@ describe('Comments real-time API', function () {
         });
 
         it('triggers a comment count update after commenting on a post', function (done) {
-            socketClient.on('members/comments/counts/update', (data) => {
+            socketClient.on('members/comments/counts:update', (data) => {
                 assert.deepStrictEqual(data, {
                     counts: {
                         [postId]: originalCount + 1
@@ -99,7 +99,7 @@ describe('Comments real-time API', function () {
         });
 
         it('triggers a comment count update after replying to a comment', function (done) {
-            socketClient.on('members/comments/counts/update', (data) => {
+            socketClient.on('members/comments/counts:update', (data) => {
                 assert.deepStrictEqual(data, {
                     counts: {
                         [postId]: originalCount + 1
@@ -117,7 +117,7 @@ describe('Comments real-time API', function () {
             });
 
             it('triggers a comment count update', function (done) {
-                socketClient.on('members/comments/counts/update', (data) => {
+                socketClient.on('members/comments/counts:update', (data) => {
                     assert.deepStrictEqual(data, {
                         counts: {
                             [postId]: originalCount + 1
