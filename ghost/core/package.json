@@ -212,8 +212,8 @@
     "cssnano": "5.1.14",
     "eslint": "8.33.0",
     "expect": "^29.0.0",
-    "html-validate": "7.13.1",
     "form-data": "^4.0.0",
+    "html-validate": "7.13.1",
     "inquirer": "8.2.5",
     "jwks-rsa": "3.0.1",
     "mocha": "10.2.0",
@@ -226,6 +226,7 @@
     "rewire": "6.0.0",
     "should": "13.2.3",
     "sinon": "14.0.2",
+    "socket.io-client": "^4.6.0",
     "supertest": "6.3.3",
     "tmp": "0.2.1",
     "toml": "3.0.0"
