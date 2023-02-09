@@ -382,8 +382,6 @@ const getAgentsWithFrontend = async () => {
 
 /**
  * WARNING: when using this, you should stop the returned ghostServer after the tests.
- * @NOTE: for now method returns a supertest agent for Frontend instead of test agent with snapshot support.
- *        frontendAgent should be returning an instance of TestAgent (related: https://github.com/TryGhost/Toolbox/issues/471)
  *  @returns {Promise<{membersAgent: InstanceType<MembersAPITestAgent>, ghostServer: Express.Application, socketClient: object}>} agents
  */
 const getAgentsForRealtime = async () => {
@@ -401,7 +399,7 @@ const getAgentsForRealtime = async () => {
         // Those tests never stopped the server in the tests manually
         await stopGhost();
 
-        // Start a new Ghost server with real HTTP listener
+        // Start a real Ghost server including realtime socket support
         ghostServer = await startGhost(bootOptions);
         const app = ghostServer.rootApp;
 

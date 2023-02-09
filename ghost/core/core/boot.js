@@ -236,7 +236,7 @@ async function initExpressApps({frontend, backend, config}) {
 }
 
 /**
- * Mounts a Socket.IO server. Only works if
+ * Mounts a Socket.IO server. Only works if a real HTTP server is started since Socket.IO wraps it directly.
  * @param {object} options
  * @param {object} options.ghostServer
  * @param {object} options.config
@@ -524,8 +524,6 @@ async function bootGhost({backend = true, frontend = true, realtime = true, serv
         if (!errors.utils.isGhostError(serverStartError)) {
             serverStartError = new errors.InternalServerError({message: serverStartError.message, err: serverStartError});
         }
-
-        console.log('server start error', serverStartError);
 
         logging.error(serverStartError);
 
