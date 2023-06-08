@@ -1,6 +1,4 @@
 import React from 'react';
-import {RolesProvider} from './RolesProvider';
-import {SettingsProvider} from './SettingsProvider';
 import {UsersProvider} from './UsersProvider';
 
 type DataProviderProps = {
@@ -9,13 +7,13 @@ type DataProviderProps = {
 
 const DataProvider: React.FC<DataProviderProps> = ({children}) => {
     return (
-        <SettingsProvider>
-            <UsersProvider>
-                <RolesProvider>
-                    {children}
-                </RolesProvider>
-            </UsersProvider>
-        </SettingsProvider>
+        // <SettingsProvider>
+        <UsersProvider>
+            {/* <RolesProvider> */}
+            {children}
+            {/* </RolesProvider> */}
+        </UsersProvider>
+        // </SettingsProvider>
     );
 };
 

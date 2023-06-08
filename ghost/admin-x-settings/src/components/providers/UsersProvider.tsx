@@ -1,7 +1,7 @@
-import React, {createContext, useCallback, useContext, useEffect, useState} from 'react';
-import {ServicesContext} from './ServiceProvider';
+import React, {createContext, useCallback, useEffect, useState} from 'react';
 import {User} from '../../types/api';
 import {UserInvite} from '../../utils/api';
+import {useApi} from './ServiceProvider';
 
 interface UsersContextProps {
     users: User[];
@@ -25,7 +25,7 @@ const UsersContext = createContext<UsersContextProps>({
 });
 
 const UsersProvider: React.FC<UsersProviderProps> = ({children}) => {
-    const {api} = useContext(ServicesContext);
+    const api = useApi();
     const [users, setUsers] = useState <User[]> ([]);
     const [invites, setInvites] = useState <UserInvite[]> ([]);
     const [currentUser, setCurrentUser] = useState <User|null> (null);
@@ -80,3 +80,4 @@ const UsersProvider: React.FC<UsersProviderProps> = ({children}) => {
 };
 
 export {UsersContext, UsersProvider};
+

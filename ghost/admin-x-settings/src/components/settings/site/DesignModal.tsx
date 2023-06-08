@@ -1,7 +1,7 @@
 import BrandSettings, {BrandSettingValues} from './designAndBranding/BrandSettings';
 import ConfirmationModal from '../../../admin-x-ds/global/ConfirmationModal';
 import NiceModal, {useModal} from '@ebay/nice-modal-react';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import StickyFooter from '../../../admin-x-ds/global/StickyFooter';
 import TabView, {Tab} from '../../../admin-x-ds/global/TabView';
 import ThemePreview from './designAndBranding/ThemePreivew';
@@ -9,7 +9,7 @@ import ThemeSettings from './designAndBranding/ThemeSettings';
 import useSettingGroup from '../../../hooks/useSettingGroup';
 import {CustomThemeSetting, SettingValue} from '../../../types/api';
 import {PreviewModalContent} from '../../../admin-x-ds/global/PreviewModal';
-import {ServicesContext} from '../../providers/ServiceProvider';
+import {useApi} from '../../providers/ServiceProvider';
 
 const Sidebar: React.FC<{
     brandSettings: BrandSettingValues
@@ -48,7 +48,7 @@ const Sidebar: React.FC<{
 const DesignModal: React.FC = () => {
     const modal = useModal();
 
-    const {api} = useContext(ServicesContext);
+    const api = useApi();
     const [themeSettings, setThemeSettings] = useState<Array<CustomThemeSetting & { dirty?: boolean }>>([]);
 
     useEffect(() => {

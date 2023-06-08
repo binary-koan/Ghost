@@ -1,11 +1,11 @@
 import Heading from '../../../../admin-x-ds/global/Heading';
 import Hint from '../../../../admin-x-ds/global/Hint';
 import ImageUpload from '../../../../admin-x-ds/global/ImageUpload';
-import React, {useContext} from 'react';
+import React from 'react';
 import SettingGroupContent from '../../../../admin-x-ds/settings/SettingGroupContent';
 import TextField from '../../../../admin-x-ds/global/TextField';
-import {ServicesContext} from '../../../providers/ServiceProvider';
 import {SettingValue} from '../../../../types/api';
+import {useFileService} from '../../../providers/ServiceProvider';
 
 export interface BrandSettingValues {
     description: string
@@ -16,7 +16,7 @@ export interface BrandSettingValues {
 }
 
 const BrandSettings: React.FC<{ values: BrandSettingValues, updateSetting: (key: string, value: SettingValue) => void }> = ({values,updateSetting}) => {
-    const {fileService} = useContext(ServicesContext);
+    const fileService = useFileService();
 
     return (
         <div className='mt-7'>

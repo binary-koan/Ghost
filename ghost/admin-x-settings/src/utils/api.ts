@@ -91,7 +91,7 @@ interface UpdatePasswordOptions {
     oldPassword?: string;
 }
 
-interface API {
+export interface APIService {
     settings: {
         browse: () => Promise<SettingsResponseType>;
         edit: (newSettings: Setting[]) => Promise<SettingsResponseType>;
@@ -134,7 +134,7 @@ interface GhostApiOptions {
     ghostVersion: string;
 }
 
-function setupGhostApi({ghostVersion}: GhostApiOptions): API {
+function setupGhostApi({ghostVersion}: GhostApiOptions): APIService {
     const {apiRoot} = getGhostPaths();
 
     function fetcher(url: string, options: RequestOptions = {}) {
@@ -159,7 +159,7 @@ function setupGhostApi({ghostVersion}: GhostApiOptions): API {
         });
     }
 
-    const api: API = {
+    const api: APIService = {
         settings: {
             browse: async () => {
                 const queryString = `group=site,theme,private,members,portal,newsletter,email,amp,labs,slack,unsplash,views,firstpromoter,editor,comments,analytics,announcement,pintura`;

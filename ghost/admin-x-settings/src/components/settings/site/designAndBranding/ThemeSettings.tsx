@@ -1,19 +1,19 @@
 import Heading from '../../../../admin-x-ds/global/Heading';
 import ImageUpload from '../../../../admin-x-ds/global/ImageUpload';
-import React, {useContext} from 'react';
+import React from 'react';
 import Select from '../../../../admin-x-ds/global/Select';
 import SettingGroupContent from '../../../../admin-x-ds/settings/SettingGroupContent';
 import TextField from '../../../../admin-x-ds/global/TextField';
 import Toggle from '../../../../admin-x-ds/global/Toggle';
 import {CustomThemeSetting} from '../../../../types/api';
-import {ServicesContext} from '../../../providers/ServiceProvider';
 import {humanizeSettingKey} from '../../../../utils/helpers';
+import {useFileService} from '../../../providers/ServiceProvider';
 
 const ThemeSetting: React.FC<{
     setting: CustomThemeSetting,
     setSetting: <Setting extends CustomThemeSetting>(value: Setting['value']) => void
 }> = ({setting, setSetting}) => {
-    const {fileService} = useContext(ServicesContext);
+    const fileService = useFileService();
 
     const handleImageUpload = async (file: File) => {
         const imageUrl = await fileService!.uploadImage(file);

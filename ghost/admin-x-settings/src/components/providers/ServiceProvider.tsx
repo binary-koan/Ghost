@@ -1,12 +1,16 @@
-import React, {createContext, useMemo} from 'react';
+import React, {createContext, useContext, useMemo} from 'react';
 import setupGhostApi from '../../utils/api';
+import useRolesService, {RolesService} from '../../utils/services/rolesService';
+import useSettingsService, {SettingsService} from '../../utils/services/settingsService';
 
 export interface FileService {
     uploadImage: (file: File) => Promise<string>;
 }
 interface ServicesContextProps {
     api: ReturnType<typeof setupGhostApi>;
-    fileService: FileService|null
+    fileService: FileService
+    settingsService: SettingsService
+    rolesService: RolesService
 }
 
 interface ServicesProviderProps {
@@ -14,12 +18,10 @@ interface ServicesProviderProps {
     ghostVersion: string;
 }
 
-const ServicesContext = createContext<ServicesContextProps>({
-    api: setupGhostApi({ghostVersion: ''}),
-    fileService: null
-});
+// TODO: Don't export this and use useServices() and friends
+export const ServicesContext = createContext<ServicesContextProps | null>(null);
 
-const ServicesProvider: React.FC<ServicesProviderProps> = ({children, ghostVersion}) => {
+export const ServicesProvider: React.FC<ServicesProviderProps> = ({children, ghostVersion}) => {
     const apiService = useMemo(() => setupGhostApi({ghostVersion}), [ghostVersion]);
     const fileService = useMemo(() => ({
         uploadImage: async (file: File): Promise<string> => {
@@ -28,14 +30,24 @@ const ServicesProvider: React.FC<ServicesProviderProps> = ({children, ghostVersi
         }
     }), [apiService]);
 
+    const settingsService = useSettingsService(apiService);
+    const rolesService = useRolesService(apiService);
+
     return (
         <ServicesContext.Provider value={{
             api: apiService,
-            fileService
+            fileService,
+            settingsService,
+            rolesService
         }}>
             {children}
         </ServicesContext.Provider>
     );
 };
 
-export {ServicesContext, ServicesProvider};
+export const useServices = () => useContext(ServicesContext)!;
+
+export const useApi = () => useServices().api;
+export const useFileService = () => useServices().fileService;
+export const useSettings = () => useServices().settingsService;
+export const useRoles = () => useServices().rolesService;

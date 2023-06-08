@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
-import {RolesContext} from '../components/providers/RolesProvider';
 import {User} from '../types/api';
 import {UserInvite} from '../utils/api';
 import {UsersContext} from '../components/providers/UsersProvider';
+import {useRoles} from '../components/providers/ServiceProvider';
 
 export type UsersHook = {
     users: User[];
@@ -32,7 +32,7 @@ function getOwnerUser(users: User[]): User {
 
 const useStaffUsers = (): UsersHook => {
     const {users, currentUser, updateUser, invites, setInvites, setUsers} = useContext(UsersContext);
-    const {roles} = useContext(RolesContext);
+    const {roles} = useRoles();
     const ownerUser = getOwnerUser(users);
     const adminUsers = getUsersByRole(users, 'Administrator');
     const editorUsers = getUsersByRole(users, 'Editor');

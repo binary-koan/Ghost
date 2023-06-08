@@ -1,7 +1,7 @@
-import React, {useContext, useEffect, useReducer, useRef, useState} from 'react';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
 import {SaveState, TSettingGroupStates} from '../admin-x-ds/settings/SettingGroup';
 import {Setting, SettingValue, SiteData} from '../types/api';
-import {SettingsContext} from '../components/providers/SettingsProvider';
+import {useSettings} from '../components/providers/ServiceProvider';
 
 interface LocalSetting extends Setting {
     dirty?: boolean;
@@ -60,7 +60,7 @@ const useSettingGroup = ({onSave}: { onSave?: () => void | Promise<void> } = {})
     const focusRef = useRef<HTMLInputElement>(null);
 
     // get the settings and saveSettings function from the Settings Context
-    const {siteData, settings, saveSettings} = useContext(SettingsContext) || {};
+    const {siteData, settings, saveSettings} = useSettings();
 
     // create a local state to store the settings
     const [localSettings, dispatch] = useReducer<SettingsReducer>(settingsReducer, settings || []);

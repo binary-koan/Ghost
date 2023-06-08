@@ -3,7 +3,7 @@ import ConfirmationModal from '../../../admin-x-ds/global/ConfirmationModal';
 import Heading from '../../../admin-x-ds/global/Heading';
 import Icon from '../../../admin-x-ds/global/Icon';
 import ImageUpload from '../../../admin-x-ds/global/ImageUpload';
-import Menu from '../../../admin-x-ds/global/Menu';
+import Menu, {MenuItem} from '../../../admin-x-ds/global/Menu';
 import Modal from '../../../admin-x-ds/global/Modal';
 import NiceModal, {useModal} from '@ebay/nice-modal-react';
 import Radio from '../../../admin-x-ds/global/Radio';
@@ -12,11 +12,9 @@ import SettingGroup from '../../../admin-x-ds/settings/SettingGroup';
 import SettingGroupContent from '../../../admin-x-ds/settings/SettingGroupContent';
 import TextField from '../../../admin-x-ds/global/TextField';
 import Toggle from '../../../admin-x-ds/global/Toggle';
-import useRoles from '../../../hooks/useRoles';
 import useStaffUsers from '../../../hooks/useStaffUsers';
 import validator from 'validator';
-import {FileService, ServicesContext} from '../../providers/ServiceProvider';
-import {MenuItem} from '../../../admin-x-ds/global/Menu';
+import {FileService, ServicesContext, useApi, useRoles} from '../../providers/ServiceProvider';
 import {User} from '../../../types/api';
 import {isAdminUser, isOwnerUser} from '../../../utils/helpers';
 import {showToast} from '../../../admin-x-ds/global/Toast';
@@ -291,7 +289,7 @@ const Password: React.FC<UserDetailProps> = ({user}) => {
     }>({});
     const newPasswordRef = useRef<HTMLInputElement>(null);
     const confirmNewPasswordRef = useRef<HTMLInputElement>(null);
-    const {api} = useContext(ServicesContext);
+    const api = useApi();
 
     useEffect(() => {
         if (saveState === 'saved') {
@@ -406,7 +404,7 @@ const UserMenuTrigger = () => (
 );
 
 const UserDetailModal:React.FC<UserDetailModalProps> = ({user, updateUser}) => {
-    const {api} = useContext(ServicesContext);
+    const api = useApi();
     const {users, setUsers, ownerUser} = useStaffUsers();
     const [userData, setUserData] = useState(user);
     const [saveState, setSaveState] = useState('');

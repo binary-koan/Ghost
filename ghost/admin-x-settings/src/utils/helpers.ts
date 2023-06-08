@@ -15,8 +15,9 @@ export function getSettingValue(settings: Setting[] | null | undefined, key: str
 }
 
 export function getGhostPaths(): IGhostPaths {
-    let path = window.location.pathname;
-    let subdir = path.substr(0, path.search('/ghost/'));
+    // let path = window.location.pathname;
+    // let subdir = path.substr(0, path.search('/ghost/'));
+    let subdir = 'http://localhost:2368';
     let adminRoot = `${subdir}/ghost/`;
     let assetRoot = `${subdir}/ghost/assets/`;
     let apiRoot = `${subdir}/ghost/api/admin`;
